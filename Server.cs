@@ -51,8 +51,10 @@ namespace EchoServer
             IPAddress addr;
             TcpListener listener;
 
-            // Verifica o endereço IP
+            // Converte a string para uma instância da classe IPAddress
             addr = IPAddress.Parse(ip);
+
+            Console.WriteLine($"Inicializando o cliente com o IP {ip}");
 
             // Inicia a escuta por conexões
             listener = new TcpListener(addr, port);
