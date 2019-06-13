@@ -36,6 +36,7 @@ namespace EchoServer
             }
 
             Console.WriteLine( $"Bytes enviados: {sent}" );
+            sock.Close();
         }
     }
 }

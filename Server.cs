@@ -51,6 +51,8 @@ namespace EchoServer
             IPAddress addr;
             TcpListener listener;
 
+            if(String.IsNullOrEmpty(ip)) ip = "0.0.0.0";
+            
             // Converte a string para uma instância da classe IPAddress
             addr = IPAddress.Parse(ip);
 
