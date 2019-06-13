@@ -38,7 +38,7 @@ namespace EchoServer
                 Console.WriteLine($"Inicializando o cliente com o IP {ip}");
 
                 // Inicia a escuta por conexões
-                listener = new TcpListener(addr, 8085);
+                listener = new TcpListener(addr, Program.port);
             }
             
             listener.Start();
@@ -46,7 +46,7 @@ namespace EchoServer
             return listener;
         }
 
-        public TcpListener Initialize(string ip = "", int port = 8085)
+        public TcpListener Initialize(string ip = "", int port = 1701)
         {
             IPAddress addr;
             TcpListener listener;

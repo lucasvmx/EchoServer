@@ -22,7 +22,7 @@ namespace EchoServer
         }
 
         public static string ip = "";
-        public static int port = 8085;
+        public static int port = 1701;
 
         public static bool have_port = false;
         public static bool have_ip = false;
@@ -36,7 +36,7 @@ namespace EchoServer
              if(listener != null)
                 listener.Stop();
 
-            Process.GetCurrentProcess().CloseMainWindow();
+            Process.GetCurrentProcess().Close();
         }
 
         static void Main(string[] args)
