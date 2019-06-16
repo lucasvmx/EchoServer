@@ -29,13 +29,13 @@ namespace EchoServer
             {
                 IPEndPoint ep = new IPEndPoint(IPAddress.Any, Program.port);
 
-                Console.WriteLine($"Inicializando o cliente com o IP {ep.Address.ToString()}");
+                Console.WriteLine($"Inicializando o cliente com o IP {ep.Address.ToString()} Porta {Program.port}");
 
                 listener = new TcpListener(ep);
             } else {
                 addr = IPAddress.Parse(ip);
 
-                Console.WriteLine($"Inicializando o cliente com o IP {ip}");
+                Console.WriteLine($"Inicializando o cliente com o IP {ip} Porta {Program.port}");
 
                 // Inicia a escuta por conexões
                 listener = new TcpListener(addr, Program.port);
@@ -50,13 +50,13 @@ namespace EchoServer
         {
             IPAddress addr;
             TcpListener listener;
-
+            
             if(String.IsNullOrEmpty(ip)) ip = "0.0.0.0";
             
             // Converte a string para uma instância da classe IPAddress
             addr = IPAddress.Parse(ip);
 
-            Console.WriteLine($"Inicializando o cliente com o IP {ip}");
+            Console.WriteLine($"Inicializando o cliente com o IP {ip} Porta {port}");
 
             // Inicia a escuta por conexões
             listener = new TcpListener(addr, port);
