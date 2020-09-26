@@ -1,4 +1,4 @@
-﻿/*
+/*
     Simples Echo Server TCP
 
     Autor: Lucas Vieira de Jesus
@@ -29,9 +29,11 @@ namespace EchoServer
 
         public static TcpListener listener = null;
 
+        public static HttpListener http_listener = null;
+
         public static void HandleCancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
-            Console.WriteLine( "Parando ...");
+            Console.WriteLine( "Stopping ...");
             
              if(listener != null)
                 listener.Stop();
@@ -55,19 +57,36 @@ namespace EchoServer
                     listener = server.Initialize(ip, port);
                 else
                     listener = server.Initialize(ip);
+
+                http_listener = server.Initialize_Http();
             } catch(Exception error) {
-                Console.WriteLine( $"Falha ao inicializar o EchoServer: {error.Message}");
+                Console.WriteLine( $"Failed to start EchoServer: {error.Message}");
                 Environment.Exit(1);
             }
 
-            while(true)
-            {
-                TcpClient client = listener.AcceptTcpClient();
-                Socket sock = client.Client;
+            Task tcp_task = Task.Run(new Action(()=> {
+                while(true) 
+                {
+                    TcpClient client = listener.AcceptTcpClient();
+                    Socket sock = client.Client;
 
-                Thread handler = new Thread(new ParameterizedThreadStart(ClientHandler.HandleClient));
-                handler.Start(sock);
-            }
+                    Thread handler = new Thread(new ParameterizedThreadStart(ClientHandler.HandleTcpClient));
+                    handler.Start(sock);
+                }
+            }));
+
+            Task http_task = Task.Run(new Action(()=> {
+                while(true)
+                {
+                    HttpListenerContext ctx = http_listener.GetContext();
+                
+                    Thread http_handler = new Thread(new ParameterizedThreadStart(ClientHandler.HandleHttpClient));
+                    http_handler.Start(ctx);
+                }
+            }));
+
+            tcp_task.Wait();
+            http_task.Wait();
         }
 
         static void ParseArgs(string[] args)
@@ -84,7 +103,7 @@ namespace EchoServer
                         IPAddress.Parse(ip);
                     } catch(Exception error)
                     {
-                        Console.WriteLine( $"Erro: {error.Message}");
+                        Console.WriteLine( $"Error: {error.Message}");
                         Environment.Exit(1);
                     }
 
@@ -95,7 +114,7 @@ namespace EchoServer
                         port = Convert.ToInt16(s.Substring(s.IndexOf("=") + 1));
                     } catch(FormatException error)
                     {
-                        Console.WriteLine($"Erro: {error.Message}");
+                        Console.WriteLine($"Error: {error.Message}");
                         Environment.Exit(1);
                     }
 

@@ -19,6 +19,18 @@ namespace EchoServer
             
         }
 
+        public HttpListener Initialize_Http()
+        {
+            HttpListener listener;
+            listener = new HttpListener();
+            listener.Prefixes.Add("http://127.0.0.1:1702/");
+            listener.Start();
+
+            Console.WriteLine($"[http] started http server");
+
+            return listener;
+        }
+
         public TcpListener Initialize(string ip = "")
         {
             IPAddress addr;
@@ -29,13 +41,13 @@ namespace EchoServer
             {
                 IPEndPoint ep = new IPEndPoint(IPAddress.Any, Program.port);
 
-                Console.WriteLine($"Inicializando o cliente com o IP {ep.Address.ToString()} Porta {Program.port}");
+                Console.WriteLine($"starting tcp server on {ep.Address.ToString()}:{Program.port}");
 
                 listener = new TcpListener(ep);
             } else {
                 addr = IPAddress.Parse(ip);
 
-                Console.WriteLine($"Inicializando o cliente com o IP {ip} Porta {Program.port}");
+                Console.WriteLine($"starting tcp server on {ip}:{Program.port}");
 
                 // Inicia a escuta por conexões
                 listener = new TcpListener(addr, Program.port);
@@ -56,7 +68,7 @@ namespace EchoServer
             // Converte a string para uma instância da classe IPAddress
             addr = IPAddress.Parse(ip);
 
-            Console.WriteLine($"Inicializando o cliente com o IP {ip} Porta {port}");
+            Console.WriteLine($"starting tcp server on {ip}:{port}");
 
             // Inicia a escuta por conexões
             listener = new TcpListener(addr, port);
